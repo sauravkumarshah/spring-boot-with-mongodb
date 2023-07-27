@@ -47,9 +47,18 @@ class SpringBootMongodbApplicationTests {
 
 	private static List<EmployeeDTO> employeeResponse = new ArrayList<>();
 
+	// @Container
+	// private static final MongoDBContainer mongoDBContainer = new MongoDBContainer(
+	// 		DockerImageName.parse("mongo:4.0.10"));
+
 	@Container
-	private static final MongoDBContainer mongoDBContainer = new MongoDBContainer(
-			DockerImageName.parse("mongo:4.0.10"));
+	private static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.4.3"));
+
+	@DynamicPropertySource
+	static void setProperties(DynamicPropertyRegistry dynamicPropertyRegistry) {
+		dynamicPropertyRegistry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+	}
+
 
 	static {
 		mongoDBContainer.start();
